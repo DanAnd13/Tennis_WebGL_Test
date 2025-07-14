@@ -10,8 +10,8 @@ namespace TennisTest.Authorisation
 {
     public class PlayfabAuthManager : MonoBehaviour
     {
-        public UserProfileTemplate currentUserProfile;
-        public GameStatisticsTemplate currentStats;
+        public UserProfileTemplate CurrentUserProfile;
+        public GameStatisticsTemplate CurrentStats;
         public StatisticsManager StatisticsManager;
 
         public Action OnRegisterSuccess;
@@ -19,11 +19,11 @@ namespace TennisTest.Authorisation
 
         private void Awake()
         {
-            if (currentUserProfile == null)
-                currentUserProfile = new UserProfileTemplate();
+            if (CurrentUserProfile == null)
+                CurrentUserProfile = new UserProfileTemplate();
 
-            if (currentStats == null)
-                currentStats = new GameStatisticsTemplate();
+            if (CurrentStats == null)
+                CurrentStats = new GameStatisticsTemplate();
         }
 
         public void Register(string username, string email, string password, string country)
@@ -58,13 +58,13 @@ namespace TennisTest.Authorisation
             {
                 Debug.Log("Registered successfully!");
 
-                currentUserProfile = new UserProfileTemplate
+                CurrentUserProfile = new UserProfileTemplate
                 {
                     Username = username,
                     Country = country
                 };
 
-                StatisticsManager.SaveProfileData(currentUserProfile);
+                StatisticsManager.SaveProfileData(CurrentUserProfile);
                 //StatisticsManager.SaveStatisticsData(currentStats);
 
                 OnRegisterSuccess?.Invoke();
@@ -87,17 +87,7 @@ namespace TennisTest.Authorisation
             {
                 Debug.Log("Login successful!");
 
-                currentUserProfile = new UserProfileTemplate { Username = username };
-                /*StatisticsManager.LoadUserData(
-                    currentUserProfile,
-                    currentStats,
-                    (updatedProfile, updatedStats) =>
-                    {
-                        currentUserProfile = updatedProfile;
-                        currentStats = updatedStats;
-                        OnLoginSuccess?.Invoke();
-                    }
-                );*/
+                CurrentUserProfile = new UserProfileTemplate { Username = username };
                 OnLoginSuccess?.Invoke();
             }, error =>
             {
@@ -107,8 +97,8 @@ namespace TennisTest.Authorisation
 
         public void Logout()
         {
-            currentUserProfile = new UserProfileTemplate(); // або null
-            currentStats = new GameStatisticsTemplate();    // або null
+            CurrentUserProfile = new UserProfileTemplate(); // або null
+            CurrentStats = new GameStatisticsTemplate();    // або null
 
             Debug.Log("Logged out successfully.");
         }

@@ -6,6 +6,7 @@ using TennisTest.Statistics;
 using UnityEngine.UI;
 using TMPro;
 using TennisTest.Struct;
+using TennisTest.PDF;
 using System;
 
 namespace TennisTest.UI
@@ -112,8 +113,8 @@ namespace TennisTest.UI
         public void Info()
         {
             StatisticsManager.LoadUserData(
-                PlayfabAuthManager.currentUserProfile,
-                PlayfabAuthManager.currentStats,
+                PlayfabAuthManager.CurrentUserProfile,
+                PlayfabAuthManager.CurrentStats,
                 (profile, stats) =>
                 {
                     // Оновлення UI:
@@ -127,6 +128,14 @@ namespace TennisTest.UI
                 }
             );
         }
+
+        public void GetPDFStatistics()
+        {
+            GameStatisticsTemplate statistics = PlayfabAuthManager.CurrentStats;
+            UserProfileTemplate userInfo = PlayfabAuthManager.CurrentUserProfile;
+            StatisticsManager.CreatePDF(statistics, userInfo);
+        }
+
 
         public void ClearRegistration()
         {

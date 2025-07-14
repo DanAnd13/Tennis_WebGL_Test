@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TennisTest.Struct;
+using TennisTest.PDF;
 using System;
 
 namespace TennisTest.Statistics
@@ -86,6 +87,11 @@ namespace TennisTest.Statistics
             int servedBalls = palyedGame * StatisticsSettings.ServesPerGame;
             int points = hitedBallls * StatisticsSettings.PointPerBall;
             return (servedBalls, points);
+        }
+
+        public void CreatePDF(GameStatisticsTemplate stats, UserProfileTemplate userInfo)
+        {
+            PDFExporter.ExportStats(stats,userInfo);
         }
 
     }
