@@ -1,7 +1,7 @@
 mergeInto(LibraryManager.library, {
   GeneratePDFWithStats: function (jsonStringPtr) {
     // ? UTF8ToString більше не працює, тому:
-    const jsonString = Module.UTF8ToString(jsonStringPtr); // ? Заміна
+    const jsonString = UTF8ToString(jsonStringPtr); // ? Заміна
     const data = JSON.parse(jsonString);
 
     const { jsPDF } = window.jspdf;
