@@ -16,6 +16,7 @@ namespace TennisTest.PDF
         {
             var data = new PlayerPDFData(stats, userInfo);
             string json = JsonUtility.ToJson(data);
+            Debug.Log("ExportStats JSON: " + json);
 
 #if UNITY_WEBGL && !UNITY_EDITOR
         GeneratePDFWithStats(json);

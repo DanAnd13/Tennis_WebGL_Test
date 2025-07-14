@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace TennisTest.Struct
 {
+    [Serializable]
     public class UserProfileTemplate
     {
         public string Username;
