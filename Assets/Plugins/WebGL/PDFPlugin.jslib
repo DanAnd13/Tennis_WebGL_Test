@@ -37,7 +37,7 @@ mergeInto(LibraryManager.library, {
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(16);
     doc.setFont("helvetica", "bold");
-    doc.text("Ігрова статистика", pageWidth / 2, y, { align: "center" });
+    doc.text("Game Statistics", pageWidth / 2, y, { align: "center" });
     y += 20;
 
     // --- Статистика (по лівому краю) ---

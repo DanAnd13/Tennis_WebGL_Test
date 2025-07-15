@@ -30,36 +30,14 @@
     </div>
 
     <script>
-      // PDF генератор
-      window.createPlayerStatsPDF = async function (jsonData) {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-
-        const stats = JSON.parse(jsonData);
-
-        doc.setFontSize(18);
-        doc.text("Player Tennis Statistics", 10, 20);
-
-        doc.setFontSize(12);
-        let y = 40;
-        for (const key in stats) {
-          doc.text(`${key}: ${stats[key]}`, 10, y);
-          y += 10;
-        }
-
-        doc.save("TennisStats.pdf");
-      };
-    </script>
-
-    <script>
       // Шлях до білду
       const buildUrl = "Build";
-      const loaderUrl = buildUrl + "/Build_Tennis_WebGL_Test.loader.js";  // <- Заміни на фактичну назву .loader.js
+      const loaderUrl = buildUrl + "/Build_Tennis_WebGL_Test.loader.js"; 
 
       const config = {
-        dataUrl: buildUrl + "/Build_Tennis_WebGL_Test.data",             // Заміни на фактичну назву .data
-        frameworkUrl: buildUrl + "/Build_Tennis_WebGL_Test.framework.js", // Заміни на фактичну назву .framework.js
-        codeUrl: buildUrl + "/Build_Tennis_WebGL_Test.wasm",              // Заміни на фактичну назву .wasm
+        dataUrl: buildUrl + "/Build_Tennis_WebGL_Test.data",             
+        frameworkUrl: buildUrl + "/Build_Tennis_WebGL_Test.framework.js",
+        codeUrl: buildUrl + "/Build_Tennis_WebGL_Test.wasm",             
         streamingAssetsUrl: "StreamingAssets",
         companyName: "YourCompany",
         productName: "TennisStats",
@@ -76,7 +54,7 @@
         createUnityInstance(canvas, config, (progress) => {
             document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
             }).then((unityInstance) => {
-            // ✅ Приховуємо loading bar після запуску
+            //Приховуємо loading bar після запуску
             document.querySelector("#unity-loading-bar").style.display = "none";
             }).catch((message) => {
             alert("Unity Load Error: " + message);
