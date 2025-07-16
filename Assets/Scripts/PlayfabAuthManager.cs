@@ -13,7 +13,6 @@ namespace TennisTest.Authorisation
         public UserProfileTemplate CurrentUserProfile;
         public GameStatisticsTemplate CurrentStats;
         public StatisticsManager StatisticsManager;
-
         public Action OnRegisterSuccess;
         public Action OnLoginSuccess;
 
@@ -65,7 +64,6 @@ namespace TennisTest.Authorisation
                 };
 
                 StatisticsManager.SaveProfileData(CurrentUserProfile);
-                //StatisticsManager.SaveStatisticsData(currentStats);
 
                 OnRegisterSuccess?.Invoke();
 
@@ -97,8 +95,8 @@ namespace TennisTest.Authorisation
 
         public void Logout()
         {
-            CurrentUserProfile = new UserProfileTemplate(); // або null
-            CurrentStats = new GameStatisticsTemplate();    // або null
+            CurrentUserProfile = new UserProfileTemplate(); 
+            CurrentStats = new GameStatisticsTemplate();   
 
             Debug.Log("Logged out successfully.");
         }

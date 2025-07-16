@@ -8,6 +8,7 @@ using TMPro;
 using TennisTest.Struct;
 using TennisTest.PDF;
 using System;
+using TennisTest.Diagrams;
 
 namespace TennisTest.UI
 {
@@ -15,6 +16,8 @@ namespace TennisTest.UI
     {
         public PlayfabAuthManager PlayfabAuthManager;
         public StatisticsManager StatisticsManager;
+        public TennisStatsChart TennisStatsChart;
+        public TennisStatsGraph TennisStatsGraph;
         public Countries CountriesSettings;
         public GameObject MainWindow;
         public GameObject AuthWindow;
@@ -29,10 +32,6 @@ namespace TennisTest.UI
         public TMP_InputField PasswordLoginInput;
         public TMP_InputField GamesInput;
         public TMP_InputField HitsInput;
-        public TextMeshProUGUI GamesTMP;
-        public TextMeshProUGUI ServesTMP;
-        public TextMeshProUGUI HitsTMP;
-        public TextMeshProUGUI PointsTMP;
         public TextMeshProUGUI LevelTMP;
 
         private void OnEnable()
@@ -73,7 +72,7 @@ namespace TennisTest.UI
 
             CountryDropdown.AddOptions(countryNames);
 
-            // Змусити оновитися
+            //Оновлення
             CountryDropdown.RefreshShownValue();
         }
 
@@ -117,14 +116,12 @@ namespace TennisTest.UI
                 PlayfabAuthManager.CurrentStats,
                 (profile, stats) =>
                 {
-                    // Оновлення UI:
-                    GamesTMP.text = "Played games: " + stats.GamesPlayed.ToString();
-                    ServesTMP.text = "Served balls: " + stats.Serves.ToString();
-                    HitsTMP.text = "Ball hits: " + stats.Hits.ToString();
-                    PointsTMP.text = "Points: " + stats.Points.ToString();
                     LevelTMP.text = "Pllayer level: " + profile.Level;
 
                     ShowInfoWindow(); // Переходимо у вікно з інформацією
+
+                    TennisStatsChart.DrawDiagram(stats.GamesPlayed, stats.Serves, stats.Hits, stats.Points);
+                    TennisStatsGraph.ShowGraph(stats.GamesPlayed, stats.Serves, stats.Hits, stats.Points);
                 }
             );
         }
@@ -134,26 +131,6 @@ namespace TennisTest.UI
             GameStatisticsTemplate statistics = PlayfabAuthManager.CurrentStats;
             UserProfileTemplate userInfo = PlayfabAuthManager.CurrentUserProfile;
             StatisticsManager.CreatePDF(statistics, userInfo);
-        }
-
-
-        public void ClearRegistration()
-        {
-            UserNameRegisInput.text = "";
-            EmailRegisInput.text = "";
-            PasswordRegisInput.text = "";
-        }
-
-        public void ClearLogin()
-        {
-            UserNameLoginInput.text = "";
-            PasswordLoginInput.text = "";
-        }
-
-        public void CleraStatistic()
-        {
-            GamesInput.text = "";
-            HitsInput.text = "";
         }
 
         public void ShowMainWindow()
@@ -185,6 +162,25 @@ namespace TennisTest.UI
         {
             EnableAllWindows();
             InfoWindow.SetActive(true);
+        }
+
+        public void ClearRegistration()
+        {
+            UserNameRegisInput.text = "";
+            EmailRegisInput.text = "";
+            PasswordRegisInput.text = "";
+        }
+
+        public void ClearLogin()
+        {
+            UserNameLoginInput.text = "";
+            PasswordLoginInput.text = "";
+        }
+
+        public void CleraStatistic()
+        {
+            GamesInput.text = "";
+            HitsInput.text = "";
         }
 
         public void EnableAllWindows()
