@@ -9,80 +9,58 @@ namespace TennisTest.Diagrams
 {
     public class TennisStatsGraph : MonoBehaviour
     {
-        [SerializeField] private Image _pointPrefab;
+        [SerializeField] private GraphicsSpot _pointPrefab;
         [SerializeField] private UILineRenderer _lineRenderer;
         [SerializeField] private RectTransform _graphContainer;
-        [SerializeField] private float _maxHeight = 100f;
+        [SerializeField] private float _maxHeight = 600f;
 
         [Header("Вісь X (підписи)")]
-        [SerializeField] private List<TextMeshProUGUI> _xAxisLabels; // Підписи "Матчі", "Подачі", ...
-
-        [Header("Вісь Y (підписи значень)")]
-        [SerializeField] private List<TextMeshProUGUI> _yAxisLabels; // Підписи "0", "25", "50", ...
+        [SerializeField] private List<TextMeshProUGUI> _xAxisLabels;
 
         [Header("Колір точок і лінії")]
         [SerializeField] private Color _pointColor;
 
-        private List<Transform> _spawnedPoints = new();
+        private readonly List<Transform> _spawnedPoints = new();
 
         public void ShowGraph(int matches, int serves, int hits, int points)
         {
             Clear();
 
-            // Дані
             var values = new List<int> { matches, serves, hits, points };
-            int yMax = Mathf.Max(values.ToArray());
+            int maxValue = Mathf.Max(values.ToArray());
 
-            float graphHeight = _maxHeight; // ⚠️ використовуємо фіксовану висоту графіка
-            float graphWidth = _graphContainer.rect.width;
-
-            // 🔹 Рівномірний крок по X, враховуючи центрування
-            float xStep = graphWidth / values.Count;
-            float xOffset = xStep / 2f;
-
-            // 1. Підписи осі Y
-            float yStep = yMax / (float)(_yAxisLabels.Count - 1);
-            for (int i = 0; i < _yAxisLabels.Count; i++)
-            {
-                float value = i * yStep;
-                _yAxisLabels[i].text = Mathf.RoundToInt(value).ToString();
-
-                // 📌 якщо потрібно розташувати по осі Y:
-                var rt = _yAxisLabels[i].rectTransform;
-                float yPos = (value / yMax) * graphHeight;
-                rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, yPos);
-            }
-
-            // 2. Побудова точок та X-підписів
-            string[] xNames = { "Матчі", "Подачі", "Відбиті", "Очки" };
+            float heightStep = _maxHeight / maxValue;
 
             for (int i = 0; i < values.Count; i++)
             {
-                float normalizedY = (float)values[i] / yMax;
-                float targetY = normalizedY * graphHeight;
-                float targetX = i * xStep + xOffset;
+                if (i >= _xAxisLabels.Count) continue;
 
-                // Точка
-                Image spot = Instantiate(_pointPrefab, _graphContainer);
-                spot.color = _pointColor;
-                RectTransform spotRT = spot.rectTransform;
+                var xLabel = _xAxisLabels[i];
+                var xLabelRT = xLabel.rectTransform;
 
-                spotRT.anchoredPosition = new Vector2(targetX, 0);
-                spotRT.DOAnchorPosY(targetY, 0.5f).SetEase(Ease.OutCubic);
+                Vector3 worldPos = xLabelRT.position;
+                Vector3 localPos = _graphContainer.InverseTransformPoint(worldPos);
 
-                _lineRenderer.controlPointsObjects.Add(spotRT);
-                _spawnedPoints.Add(spotRT);
+                float x = localPos.x;
+                float y = values[i] * heightStep - (_maxHeight / 2f);
 
-                // Підпис X
-                if (i < _xAxisLabels.Count)
-                {
-                    var xLabel = _xAxisLabels[i];
-                    xLabel.text = xNames[i];
-                    xLabel.rectTransform.anchoredPosition = new Vector2(targetX, xLabel.rectTransform.anchoredPosition.y);
-                }
+                var point = Instantiate(_pointPrefab, _graphContainer);
+                //point.SpotImage.color = _pointColor;
+                var pointRT = point.GetComponent<RectTransform>();
+                pointRT.anchoredPosition = new Vector2(x, 0);
+                pointRT.DOAnchorPosY(y, 0.5f).SetEase(Ease.OutCubic);
+                point.ValueLabel.text = values[i].ToString();
+
+                _lineRenderer.controlPointsObjects.Add(pointRT);
+                _spawnedPoints.Add(pointRT);
+            }
+
+            string[] xNames = { "Матчі", "Подачі", "Відбиті", "Очки" };
+            for (int i = 0; i < _xAxisLabels.Count && i < xNames.Length; i++)
+            {
+                _xAxisLabels[i].text = xNames[i];
             }
         }
-
 
         private void Clear()
         {
@@ -96,3 +74,5 @@ namespace TennisTest.Diagrams
         }
     }
 }
+
+
